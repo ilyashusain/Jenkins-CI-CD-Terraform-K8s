@@ -2,13 +2,13 @@
 
 # Outline of Solution
 
+In this guide we will use Jenkins to attain full ci-cd integration for our pipeline for a sample webpage app using k8s and terraform.
+
 We will create a master node. On the master node we will install terraform to help spin up a cluster. We will then fetch the credentials for our cluster which will allow us to interact with the cluster using the ```kubectl``` commands. Then we will deploy an application on to one of the cluster nodes using ```kubectl```.
 
 Also on our master node is a jenkins controller that waits for commit requests from Github. On each commit, the deployment on the cluster node is updated.
 
 ``` ```
-
-In this guide we will use Jenkins to attain full ci-cd integration for our pipeline for a sample webpage app using k8s and terraform.
 
 ## 0. Create a services account
 
