@@ -49,7 +49,7 @@ gcloud config set project <Project Name>
 gcloud container clusters get-credentials --region europe-west1-b gke-cluster
 ```
 
-This will set the active project to your ```<Project Name>```, whereby your active clusters in GKE can now be queried by ```kubectl```.
+Running these commands will set the active project to your ```<Project Name>```, and the ```gcloud container clusters get-credentials``` updates the ```kubeconfig``` file with new end-point data so that your active clusters in GKE can now be queried by ```kubectl```.
 
 ## 5. Configure docker
 
