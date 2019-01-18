@@ -12,7 +12,7 @@ Also on our master node is a jenkins controller that waits for commit requests f
 
 Create a master node. Create a services account and copy the .json key into ```~/creds/serviceaccount.json``` on the master node.
 
-## 1. Create a node
+## 1. Configure master node
 
 Configure the firewalls to pass in http traffic and jenkins on port ```8080```.
 
