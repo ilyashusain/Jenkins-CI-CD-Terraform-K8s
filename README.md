@@ -49,6 +49,8 @@ gcloud config set project <Project Name>
 gcloud container clusters get-credentials --region europe-west1-b gke-cluster
 ```
 
+This will set the active project to your ```<Project Name>```, whereby your active clusters in GKE can now be queried by ```kubectl```.
+
 ## 5. Configure docker
 
 Configure docker by placing root user into the docker group. This way, we will not have to use ```sudo``` every time we try to run a docker command. First, create the docker group:
