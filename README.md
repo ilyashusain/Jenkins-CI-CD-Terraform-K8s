@@ -8,8 +8,6 @@ We will create a master node. On the master node we will install terraform to he
 
 Also on our master node is a jenkins controller that waits for commit requests from Github. On each commit, the deployment on the cluster node is updated.
 
-``` ```
-
 ## 0. Create a services account
 
 Create a master node. Create a services account and copy the .json key into ```~/creds/serviceaccount.json``` on the master node.
