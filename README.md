@@ -2,7 +2,7 @@
 
 # Outline of Solution
 
-In this guide we will use Jenkins to attain full ci-cd integration for our pipeline for a sample webpage app using k8s and terraform. We will perform this on a CentOS-7 machine, and we recommend at least 1 vCPU (jenkins tends to crash on smaller machines). Our provideer of choice is Google Cloud Platform.
+In this guide we will use Jenkins to attain full ci-cd integration for our pipeline for a sample webpage app using k8s and terraform. We will perform this on a CentOS-7 machine, and we recommend at least 1 vCPU (jenkins tends to crash on smaller machines). Our cloud provider of choice is Google Cloud Platform.
 
 We will create a master node. On the master node we will install terraform to help spin up a cluster. We will then fetch the credentials for our cluster which will allow us to interact with the cluster using the ```kubectl``` commands. Then we will deploy an application on to one of the cluster nodes using ```kubectl```.
 
