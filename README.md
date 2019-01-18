@@ -102,7 +102,7 @@ docker push <Your Dockerhub Account>/hellowhale
 
 Create a deployment for the docker image:
 
-```kubectl create deployment hellowhale --image ilyashusain/hellowhale```
+```kubectl create deployment hellowhale --image <Your Dockerhub Account>/hellowhale```
 
 Expose the deployment with ```--type LoadBalancer```:
 
