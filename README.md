@@ -4,6 +4,8 @@
 
 In this guide we will use Jenkins to attain full CI/CD integration for our pipeline for a sample webpage app using Kubernetes (k8s) and Terraform. We will perform this on a CentOS-7 machine, and we recommend at least 1 vCPU (jenkins tends to crash on smaller machines). Our cloud provider of choice will be Google Cloud Platform; for this guide we assume basic knowledge of GCP, including how to create service accounts.
 
+
+
 We will first create a master node. On the master node we will install Terraform to help spin up a cluster of nodes. We will then download Kubectl (Kubernetes functionality) and fetch the credentials for our cluster which will allow us to interact with the cluster using ```kubectl``` commands. Next, we will containerize a web appllication using Docker and deploy this containerized application on to one of the cluster nodes by again using ```kubectl``` commands.
 
 Also, on our master node is a jenkins controller that waits for commit requests from Github. On each commit, the deployment on the cluster node is updated, thereby permitting continuous deployment of changes.
