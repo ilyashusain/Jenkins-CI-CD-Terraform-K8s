@@ -1,20 +1,20 @@
-# Jenkins CI-CD Terraform K8s
+# Jenkins CI/CD Terraform K8s
 
 # Outline of Solution
 
-In this guide we will use Jenkins to attain full ci-cd integration for our pipeline for a sample webpage app using k8s and terraform. We will perform this on a CentOS-7 machine, and we recommend at least 1 vCPU (jenkins tends to crash on smaller machines). Our cloud provider of choice will be Google Cloud Platform.
+In this guide we will use Jenkins to attain full CI/CD integration for our pipeline for a sample webpage app using Kubernetes (k8s) and Terraform. We will perform this on a CentOS-7 machine, and we recommend at least 1 vCPU (jenkins tends to crash on smaller machines). Our cloud provider of choice will be Google Cloud Platform; for this guide we assume basic knowledge of GCP, including how to create service accounts.
 
-We will first create a master node. On the master node we will install terraform to help spin up a cluster of nodes. We will then fetch the credentials for our cluster which will allow us to interact with the cluster using ```kubectl``` commands. Next, we will containerize a web appllication using Docker and deploy this containerized application on to one of the cluster nodes by again using ```kubectl``` commands.
+We will first create a master node. On the master node we will install Terraform to help spin up a cluster of nodes. We will then download Kubectl (Kubernetes functionality) and fetch the credentials for our cluster which will allow us to interact with the cluster using ```kubectl``` commands. Next, we will containerize a web appllication using Docker and deploy this containerized application on to one of the cluster nodes by again using ```kubectl``` commands.
 
 Also, on our master node is a jenkins controller that waits for commit requests from Github. On each commit, the deployment on the cluster node is updated, thereby permitting continuous deployment of changes.
 
 ## 0. Create a services account
 
-Create a master node. Create a services account and copy the .json key into ```~/creds/serviceaccount.json``` on the master node.
+In GCP compute engine, create a master node. Next, create a services account with owner permissions and copy the .json key into ```~/creds/serviceaccount.json``` on the master node.
 
 ## 1. Configure master node
 
-Configure the firewalls to pass in http traffic and jenkins on port ```8080```.
+Configure the firewalls on the master node to pass in http traffic on port ```80``` and jenkins on port ```8080```.
 
 ## 2. Install prerequisite plugins
 
@@ -24,17 +24,17 @@ Install java, wget, git, unzip, docker and kubernetes on the master node with th
 
 ## 3. Install Terraform
 
-Install terraform on the master node. Fetch the link from the website for linux-64-bit and ```wget``` it. Unzip the folder and move the resultant file to the local binaries, as such:
+Install Terraform on to the master node. Fetch the link from the website for linux-64-bit (depending on your host machine) and ```wget``` it. Unzip the folder and move the resultant file to the local binaries, as such:
 
 ```sudo mv terraform /usr/local/bin```
 
 ## 4. Terraform Cluster Creation
 
-Authenticate with google cloud and follow the instructions:
+On the master node, authenticate with google cloud and follow the instructions:
 
 ```gcloud auth login```
 
-Fork main repository and git clone. ```cd``` into the ```cluster``` folder and run:
+Fork the above main repository and ```git clone``` the forked repository on to the master node. ```cd``` into the ```cluster``` folder and run:
 
 ```terraform init```
 
@@ -53,7 +53,7 @@ Running these commands will set the active project to your ```<Project Name>```,
 
 ## 5. Configure docker
 
-Configure docker by placing root user into the docker group. This way, we will not have to use ```sudo``` every time we try to run a docker command. First, create the docker group:
+Configure docker by placing root user into the docker group. This way, we will not have to use ```sudo``` every time we try to run a docker command. First, on the master node create the docker group:
 
 ```sudo groupadd docker```
 
@@ -65,7 +65,7 @@ Restart the master node through GCP so new user permissions for the docker group
 
 ## 6. Install jenkins
 
-Install jenkins (CentOS-7):
+On the master node install jenkins (CentOS-7):
 
 ```
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
@@ -77,7 +77,7 @@ Place the jenkins user into the docker group. If this is not done then jenkins w
 
 ```sudo usermod -aG docker jenkins```
 
-Restart the master node so new user permissions for the docker group take effect. Go into the master node and start the jenkins service:
+Restart the master node so new user permissions for the docker group take effect. Upon restarting, start the jenkins service:
 
 ```sudo service jenkins start```
 
@@ -85,7 +85,7 @@ Copy the master node's ip into the browser as ```<master node ip>:8080>``` and f
 
 ## 7. Setting up docker containers for hellowhale
 
-Start the docker service:
+On the master node start the docker service:
 
 ```sudo service docker start```
 
@@ -100,7 +100,7 @@ docker push <Your Dockerhub Account>/hellowhale
 
 ## 8. Create k8s cluster for hellowhale deployment
 
-Create a deployment for the docker image:
+On the mmaster node create a deployment for the docker image:
 
 ```kubectl create deployment hellowhale --image <Your Dockerhub Account>/hellowhale```
 
@@ -127,24 +127,24 @@ Restart the jenkins service:
 
 ```sudo service jenkins restart```
 
-## 10. Configure jenkins in the browser
+## 10. Configure Jenkins in the browser
 
-Once you have logged in to jenkins, navigate to ```Manage Jenkins > Configure System```. Under ```Global Properties``` tick environment variables and put ```DOCKER_HUB``` under ```Name``` and your dockerhub password under ```Value```.
+We have just restarted the Jenkins server on the master node, so the Jenkins webpage will need time to become accessible again. Once Jenkins is accessible, login to Jenkins in the browser and navigate to ```Manage Jenkins > Configure System```. Under ```Global Properties``` tick environment variables and put ```DOCKER_HUB``` under ```Name``` and your dockerhub password under ```Value```.
 
 Under ```Jenkins Location``` in the ```Jenkins URL``` put ```http://<master node ip>:8080/```.
 
 Under ```Github``` click "Advanced" and tick "Specify another hook URL for GitHub configuration" and insert into the box that appears:
-```http://<master node ip>:8080/github-webhook/```. This will allow triggering of updates on git commits.
+```http://<master node ip>:8080/github-webhook/```. This will allow triggering of builds and deployments on git commits.
 
 Click save.
 
 ## 11. Configure Github webhooks
 
-In your Github repository, navigate to ```Settings``` and click on the ```webhooks``` pane. Click ```Add Webhook``` and under the payload url enter ```http://<master node ip>:8080/github-webhook/```, and in the drop down menu select ```application/json```. When done, click Add Webhook.
+In your Github repository that you forked in step #4, navigate to ```Settings``` and click on the ```webhooks``` pane. Click ```Add Webhook``` and under the payload url enter ```http://<master node ip>:8080/github-webhook/```, and in the drop down menu select ```application/json```. When done, click Add Webhook.
 
-## 12. Create a jenkins job
+## 12. Create a Jenkins job
 
-Create a jenkins job, and click ```Github Project```, enter the url of your github repo.
+Create a jenkins job, and click ```Github Project```, enter the url of your github repository.
 
 Under Source Code Management click ```git``` and insert the github for your repo again.
 
@@ -159,18 +159,18 @@ docker login -u <Your Dockerhub Account> -p ${DOCKER_HUB}
 docker push $IMAGE_NAME
 ```
 
-This will build an image and push it to dockerhub on each commit. Create another ```execute shell`` and enter the below code:
+This will build an image and push it to Dockerhub on each commit. Create another ```execute shell`` and enter the below code:
 
 ```
 IMAGE_NAME="<Your Dockerhub Account>/hellowhale:${BUILD_NUMBER}"
 kubectl set image deployment/hellowhale hellowhale=$IMAGE_NAME
 ```
 
-This will reset the deployment image on each commit. We are now finished with the pipeline, let's test it.
+This will reset the deployment image on each commit. We are now finished with the pipeline, let us test it.
 
 ## 13. Testing pipeline
 
-Make a notable change to the ```html/index.html``` in the machine. Then run:
+Make a notable change to the ```html/index.html``` on the master node. Then run:
 
 ```git add html/index.html```
 
@@ -178,4 +178,4 @@ Commit the changes and follow the instructions for git authentication:
 
 ```git commit -m "Change"```
 
-Finally ```git push```. Quickly switch to the jenkins browser and click on your project. You should see a progress bar, when it is complete go to your browser and enter the LoadBalancer's ip into the search bar (as in the last step of step 6). You should see the changes you commited to Github.
+Finally ```git push```. Quickly switch to the jenkins browser and click on your project. You should see a progress bar, when it is complete go to your browser and enter the LoadBalancer's ip into the search bar (as in the last step of step #6). You should see the changes you commited to Github.
