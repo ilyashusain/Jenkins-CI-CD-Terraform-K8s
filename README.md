@@ -81,7 +81,7 @@ Restart the master node so new user permissions for the docker group take effect
 
 ```sudo service jenkins start```
 
-Copy the master node's ip into the browser as ```<master node ip>:8080>``` and follow the instructions to setting up a user account for jenkins. If the service is not up, redo step #1 and instead allow all ports, not just ```8080```, and attempt to reconnect.
+Copy the master node's ip into the browser as ```<master node ip>:8080``` and follow the instructions to setting up a user account for jenkins. If the service is not up, redo step #1 and instead allow all ports, not just ```8080```, and attempt to reconnect.
 
 ## 7. Setting up docker containers for hellowhale
 
@@ -100,7 +100,7 @@ docker push <Your Dockerhub Account>/hellowhale
 
 ## 8. Create k8s cluster for hellowhale deployment
 
-On the mmaster node create a deployment for the docker image:
+On the master node create a deployment for the docker image:
 
 ```kubectl create deployment hellowhale --image <Your Dockerhub Account>/hellowhale```
 
