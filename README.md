@@ -4,7 +4,9 @@
 
 **Brief:**
 
-In this guide we will be using Jenkins to attain full CI/CD integration for our pipeline for a sample webpage app, using Terraform and Kubernetes (k8s) to manage our infrastructure. We will perform this on a CentOS-7 machine, and we recommend at least 1 vCPU (jenkins tends to crash on smaller machines). Our cloud provider of choice will be Google Cloud Platform; for this guide we assume basic knowledge of GCP, this includes how to create service accounts.
+In this guide we will be using Jenkins to attain full CI/CD integration for our pipeline for a sample webpage app, using Terraform and Kubernetes (k8s) to manage our infrastructure.
+
+We will perform this on a CentOS-7 machine that will act as the master node, and for this node we recommend at least 1 vCPU (jenkins tends to crash on smaller machines). Our cloud provider of choice will be Google Cloud Platform; for this guide we assume basic knowledge of GCP, this includes how to create service accounts.
 
 **Outline:**
 
