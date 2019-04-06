@@ -10,7 +10,7 @@ We will perform this on a CentOS-7 machine that will act as the master node, and
 
 **Outline:**
 
-We will first create a master node. On the master node we will install Terraform to help spin up a cluster of nodes. We will then download ```kubectl``` (Kubernetes functionality) and fetch the credentials for our cluster which will allow us to interact with the cluster using ```kubectl``` commands. Next, we will containerize a web appllication using Docker and deploy this containerized application on to one of the cluster nodes by again using ```kubectl``` commands.
+We will first create a master node. On the master node we will install Terraform to help spin up a cluster of nodes. We will then download ```kubectl``` (Kubernetes functionality) and fetch the credentials for our cluster which will allow us to interact with the cluster using ```kubectl``` commands. Next, we will containerize a web application using Docker and deploy this containerized application on to one of the cluster nodes by again using ```kubectl``` commands.
 
 Also, on our master node is a jenkins controller that waits for commit requests from Github. On each commit, the deployment on the cluster node is updated, thereby permitting continuous deployment of changes.
 
