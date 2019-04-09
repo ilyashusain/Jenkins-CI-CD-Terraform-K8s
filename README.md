@@ -32,7 +32,7 @@ Install java, wget, git, unzip, docker and kubernetes on the master node with th
 
 ## 3. Install Terraform
 
-Install Terraform on to the master node. Fetch the link from the website for linux-64-bit (depending on your host machine) and ```wget``` it. Unzip the folder and move the resultant file to the local binaries, as such:
+Install Terraform on to the master node. Fetch the link from the website for linux-64-bit and ```wget``` it. Unzip the folder and move the resultant file to the local binaries, as such:
 
 ```sudo mv terraform /usr/local/bin```
 
