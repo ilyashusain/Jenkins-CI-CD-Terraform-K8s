@@ -187,3 +187,22 @@ Commit the changes and follow the instructions for git authentication:
 ```git commit -m "Change"```
 
 Finally ```git push```. Quickly switch to the jenkins browser and click on your project. You should see a progress bar, when it is complete go to your browser and enter the LoadBalancer's ip into the search bar (as in the last step of step #6). You should see the changes you commited to Github.
+
+
+module "gce-lb-http1" {
+  source            = "GoogleCloudPlatform/lb-http/google"
+  name              = "group1-http-lb"
+  target_tags       = "${module.mig1.target_tags}"
+
+backends          = {
+    "0" =
+      { group = "${module.mig1.instance_group}" }
+    ,
+  }
+
+
+  backend_params    = [
+    # health check path, port name, port number, timeout seconds.
+    "/health_check,http,80,10"
+  ]
+}
